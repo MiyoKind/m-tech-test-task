@@ -1,13 +1,17 @@
 <template>
+  <!-- Страница создания сотрудника -->
   <div>
     <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
+    
     <v-data-table :items="employees" :headers="employeeHeaders"></v-data-table>
+    
     <v-dialog v-model="employeeModal" persistent max-width="600">
       <template v-slot:activator="{ props }">
         <v-btn color="primary" v-bind="props" @click="openEmployeeModal('employeeFields')">
           +
         </v-btn>
       </template>
+      
       <v-card>
         <v-card-title>Создать сотрудника</v-card-title>
         <v-card-text>
@@ -32,21 +36,25 @@ export default {
   },
   data() {
     return {
+      // Breadcrumbs
       breadcrumbs: [
         { text: "Главная", disabled: false },
         { text: "Сотрудники", disabled: true },
       ],
+      // Массив данных о сотрудниках
       employees: [],
+      // Заголовки таблицы данных сотрудников
       employeeHeaders: [
         { title: "Employee", value: "selectedEmployee" },
         { title: "Supervisor", value: "selectedSupervisor" },
         { title: "Rate Type", value: "rateType" },
         { title: "Business Unit", value: "selectedBusinessUnit" },
         { title: "Capitalization Percentage", value: "capitalizationPercentage" },
-        { title: "position", value: "selectedPosition"}
+        { title: "Position", value: "selectedPosition"}
       ],
+      // Статус модального окна
       employeeModal: false,
-      currentFormConfig: null,
+      // Конфигурация формы создания сотрудников
       employeeFields: [
         {
           name: "employee",
@@ -76,6 +84,7 @@ export default {
           name: "capitalizationPercentage",
           type: "text",
           label: "Процент капитализации",
+          // Валидация поля процента капитализации
           rules: [(v) => /^\d+$/.test(v) && v >= 0 && v <= 100 || 'Введите корректное значение в % (0-100)']
         },
         { name: "position", type: "text", label: "Должность" },
@@ -83,11 +92,15 @@ export default {
     };
   },
   methods: {
+    // Метод открытия модального окна
     openEmployeeModal(fields) {
       this.currentFormConfig = { fields: this[fields] };
       this.employeeModal = true;
     },
+    
+    // Метод обработки события отправки формы
     handleEmployeeSubmit(data) {
+      // Форматирование данных для отображения в таблице
       const employeeData = {
         selectedEmployee: data.employee,
         selectedSupervisor: data.supervisor,
@@ -96,17 +109,26 @@ export default {
         capitalizationPercentage: data.capitalizationPercentage,
         selectedPosition: data.position
       };
+      
+      // Добавление новых данных в таблицу
       this.employees.push(employeeData);
+      
+      // Очистка формы
       this.employeeModal = false;
       this.resetForm();
     },
+    
+    // Метод обработки события отмены отправки формы
     handleCancel() {
+      // Сброс формы
       this.employeeModal = false;
       this.resetForm();
     },
+    
+    // Метод для сброса данных формы
     resetForm() {
-        this.currentFormConfig = null
-      },
+      this.currentFormConfig = null;
+    },
   },
 };
 </script>

@@ -1,4 +1,5 @@
 <template>
+  <!-- Настраиваемый компонент формы для заполнения -->
   <v-form ref="submit-form" v-on:submit.prevent="submitForm">
     <v-container>
       <v-row>
@@ -39,14 +40,17 @@
 <script>
 export default {
   props: {
+    // Массив конфигураций полей формы
     fields: {
       type: Array,
       required: true,
     },
+    // Колбэк-функция для отправки формы
     onSubmit: {
       type: Function,
       required: true,
     },
+    // Колбэк-функция для отмены отправки формы
     onCancel: {
       type: Function,
       required: true,
@@ -54,14 +58,19 @@ export default {
   },
   data() {
     return {
+      // Данные формы для хранения заполненных значений
       formData: {},
     };
   },
   methods: {
+    // Метод, вызываемый при отправке формы
     submitForm() {
+      // Вызов метода onSubmit() из родительского компонента с данными формы
       this.onSubmit(this.formData);
     },
+    // Метод, вызываемый при отмене отправки формы
     cancelForm() {
+      // Вызов метода onCancel() из родительского компонента
       this.onCancel();
     },
   },
